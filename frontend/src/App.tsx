@@ -1,16 +1,33 @@
 import './App.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 
-import data from './data.json';
+interface Dish {
+  name: string;
+  price: number;
+}
 
-function App() {
+interface Props {
+  dishes: Dish[];
+}
+
+const App: React.FunctionComponent<Props> = props => {
+  const [ordered, setOrdered] = useState<Dish[]>([]);
+  const addOrder = (newDish: Dish) => () => setOrdered(ordered => [...ordered, newDish]);
+
   return (
     <div>
-      {data.dishes.map((d, i) => (
+      {props.dishes.map((d, i) => (
         <div key={i} className="dish-item">
           <div>{d.name}</div>
           <div>{d.price}</div>
+          <button onClick={addOrder(d)}>Order</button>
+        </div>
+      ))}
+
+      {ordered.map((d, i) => (
+        <div key={i} className="dish-item">
+          <div>{d.name}</div>
         </div>
       ))}
     </div>
